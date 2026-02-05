@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        jdk 'JAVA'  
+        jdk 'java'  
     }
     stages {
         stage('git checkout') {
@@ -24,7 +24,7 @@ pipeline {
             steps {
                script {
                     // Docker image details
-                    def dockerImage = 'misbahashim/maven-java-sample-app'
+                    def dockerImage = 'janstan94/maven-java-sample-app'
                     def dockerTag = 'latest'
 
                     // Docker login
@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     // Pull and run the Docker container
-                    def dockerImage = 'misbahashim/maven-java-sample-app'
+                    def dockerImage = 'janstan94/maven-java-sample-app'
                     def dockerTag = 'latest'
                     bat "docker pull ${dockerImage}:${dockerTag}"
                     bat "docker run -d -p 8001:8001 --name maven-app ${dockerImage}:${dockerTag}"
