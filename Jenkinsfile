@@ -24,7 +24,7 @@ pipeline {
             steps {
                script {
                     // Docker image details
-                    def dockerImage = 'janstan94/maven-java-sample-app'
+                    def dockerImage = 'anoop8cd/maven-java-sample-app'
                     def dockerTag = 'latest'
 
                     // Docker login
