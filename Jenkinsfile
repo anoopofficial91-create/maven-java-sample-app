@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('git checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/Jan-stan/maven-java-sample-app.git'
+                git branch: 'master', url: 'https://github.com/anoopofficial91-create/maven-java-sample-app.git'
             }
         }
         stage('compile') {
@@ -28,7 +28,7 @@ pipeline {
                     def dockerTag = 'latest'
 
                     // Docker login
-                    withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    withCredentials([usernamePassword(credentialsId: 'docker123', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
                     }
 
@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     // Pull and run the Docker container
-                    def dockerImage = 'janstan94/maven-java-sample-app'
+                    def dockerImage = 'anoop8cd/maven-java-sample-app'
                     def dockerTag = 'latest'
                     bat "docker pull ${dockerImage}:${dockerTag}"
                     bat "docker run -d -p 8001:8001 --name maven-app ${dockerImage}:${dockerTag}"
