@@ -5,51 +5,51 @@ pipeline {
         jdk 'java'
         maven 'maven'
     }
+
     stages {
         stage('git checkout') {
             steps {
                 git branch: 'master', url: 'https://github.com/anoopofficial91-create/maven-java-sample-app.git'
             }
         }
+
         stage('compile') {
             steps {
-                bat 'mvn spring-javaformat:apply'
-                bat 'mvn clean compile'
+                sh 'mvn spring-javaformat:apply'
+                sh 'mvn clean compile'
             }
         }
-        stage('built') {
+
+        stage('build') {
             steps {
-                bat 'mvn package'
+                sh 'mvn package'
             }
         }
+
         stage('push docker image') {
             steps {
-               script {
-                    // Docker image details
+                script {
                     def dockerImage = 'anoop8cd/maven-java-sample-app'
                     def dockerTag = 'latest'
 
-                    // Docker login
                     withCredentials([usernamePassword(credentialsId: 'docker123', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+                        sh "docker login -u $DOCKER_USER -p $DOCKER_PASS"
                     }
 
-                    // Build the Docker image
-                    bat "docker build -t ${dockerImage}:${dockerTag} ."
-
-                    // Push the Docker image to Docker Hub
-                    bat "docker push ${dockerImage}:${dockerTag}"
-                } 
+                    sh "docker build -t ${dockerImage}:${dockerTag} ."
+                    sh "docker push ${dockerImage}:${dockerTag}"
+                }
             }
         }
+
         stage('deploy application') {
             steps {
                 script {
-                    // Pull and run the Docker container
                     def dockerImage = 'anoop8cd/maven-java-sample-app'
                     def dockerTag = 'latest'
-                    bat "docker pull ${dockerImage}:${dockerTag}"
-                    bat "docker run -d -p 8001:8001 --name maven-app ${dockerImage}:${dockerTag}"
+
+                    sh "docker pull ${dockerImage}:${dockerTag}"
+                    sh "docker run -d -p 8001:8001 --name maven-app ${dockerImage}:${dockerTag}"
                 }
             }
         }
