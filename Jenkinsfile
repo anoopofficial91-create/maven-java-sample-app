@@ -32,9 +32,9 @@ pipeline {
                     def dockerImage = 'anoop8cd/maven-java-sample-app'
                     def dockerTag = 'latest'
 
-                   withCredentials([usernamePassword(credentialsId: 'docker123', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh "docker login -u $DOCKER_USER -p $DOCKER_PASS"
-                   }
+                  withCredentials([usernamePassword(credentialsId: 'docker123', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                  sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+                    }
 
                     sh "docker build -t ${dockerImage}:${dockerTag} ."
                     sh "docker push ${dockerImage}:${dockerTag}"
